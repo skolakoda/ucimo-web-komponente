@@ -3,6 +3,7 @@ class StarWarsPlanets extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({mode: "open"})
+    this.loadData("https://swapi.co/api/planets")
   }
 
   static get observedAttributes() {
@@ -25,22 +26,16 @@ class StarWarsPlanets extends HTMLElement {
     this.setAttribute("planets", JSON.stringify(v))
   }
 
-  async fetchPlanets(url) {
+  async loadData(url) {
     this.loading = true
     const response = await fetch(url)
-    const json = await response.json()
-    this.planets = json
+    this.planets = await response.json()
     this.loading = false
   }
 
-  async connectedCallback() {
-    this.shadowRoot.addEventListener("click", (event) => {
-      const name = event.srcElement.id
-      if (this[name]) {
-        this[name]()
-      }
-    })
-    await this.fetchPlanets("https://swapi.co/api/planets")
+  // componentDidMount
+  connectedCallback() {
+    this.shadowRoot.addEventListener("click", e => this[e.target.id]())
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -48,23 +43,28 @@ class StarWarsPlanets extends HTMLElement {
   }
 
   next() {
-    this.fetchPlanets(this.planets.next)
+    this.loadData(this.planets.next)
   }
 
   previous() {
-    this.fetchPlanets(this.planets.previous)
+    this.loadData(this.planets.previous)
   }
 
-  renderPrevious() {
-    return this.planets.previous
-      ? `<button id="previous">Previous</button>`
-      : `<button disabled>Previous</button>`
-  }
-
-  renderNext() {
-    return this.planets.next
-      ? `<button id="next">Next</button>`
-      : `<button disabled>Next</button>`
+  renderRows() {
+    return this.planets.results.map(planet => {
+      return `
+        <tr>
+          <td>${planet.name}</td>
+          <td>${planet.terrain}</td>
+          <td>${planet.population}</td>
+          <td>${planet.climate}</td>
+          <td>${planet.diameter}</td>
+          <td>${planet.gravity}</td>
+          <td>${planet.orbital_period}</td>
+          <td>${planet.rotation_period}</td>
+          <td>${planet.surface_water}</td>
+        </tr>
+    `}).join("")
   }
 
   render() {
@@ -72,42 +72,24 @@ class StarWarsPlanets extends HTMLElement {
       this.shadowRoot.innerHTML = `Loading...`
     } else {
       this.shadowRoot.innerHTML = `
-      <span>
-        <h3><slot name="title">Star Wars Planets</slot></h3>
-        <div>Count: ${this.planets.count}</div>
-        ${this.renderPrevious()}
-        ${this.renderNext()}
-        <table>
-          <tr>
-            <th>Name</th>
-            <th>Terrain</th>
-            <th>Population</th>
-            <th>Climate</th>
-            <th>Diameter</th>
-            <th>Gravity</th>
-            <th>Orbital Period</th>
-            <th>Rotation Period</th>
-            <th>Surface Water</th>
-            <th>URL</th>
-          </tr>
-          ${this.planets.results.map((planet) => {
-          return `
-            <tr>
-              <td>${planet.name}</td>
-              <td>${planet.terrain}</td>
-              <td>${planet.population}</td>
-              <td>${planet.climate}</td>
-              <td>${planet.diameter}</td>
-              <td>${planet.gravity}</td>
-              <td>${planet.orbital_period}</td>
-              <td>${planet.rotation_period}</td>
-              <td>${planet.surface_water}</td>
-              <td>${planet.url}</td>
-            </tr>
-          `
-        }).join("")}
-        </table>
-      </span>
+      <h3><slot name="title">Star Wars Planets</slot></h3>
+      <div>Count: ${this.planets.count}</div>
+      <button id="previous" ${this.planets.previous ? "" : "disabled"}>Previous</button>
+      <button id="next" ${this.planets.next ? "" : "disabled"}>Next</button>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Terrain</th>
+          <th>Population</th>
+          <th>Climate</th>
+          <th>Diameter</th>
+          <th>Gravity</th>
+          <th>Orbital Period</th>
+          <th>Rotation Period</th>
+          <th>Surface Water</th>
+        </tr>
+        ${this.renderRows()}
+      </table>
     `
     }
   }
