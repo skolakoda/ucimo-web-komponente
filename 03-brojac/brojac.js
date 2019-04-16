@@ -19,9 +19,27 @@ template.innerHTML = `
 export class Brojac extends HTMLElement {
   constructor() {
     super()
-    this.koren = this.attachShadow({ mode: 'open' })  // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
-    this.koren.appendChild(template.content)
-    this.koren.appendChild(style)
+    this._value = 0
+
+    const okvir = this.attachShadow({ mode: 'open' })  // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
+    okvir.appendChild(template.content)
+    okvir.appendChild(style)
+
+    this.info = okvir.querySelector('p')
+    this.dugmePlus = okvir.querySelectorAll('button')[1]
+    this.dugmeMinus = okvir.querySelectorAll('button')[0]
+
+    this.dugmePlus.addEventListener('click', e => this.value++)
+    this.dugmeMinus.addEventListener('click', e => this.value--)
+  }
+
+  set value(value) {
+    this._value = value
+    this.info.innerText = this._value
+  }
+
+  get value() {
+    return this._value
   }
 }
 
