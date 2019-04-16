@@ -51,28 +51,24 @@ class StarWarsPlanets extends HTMLElement {
   }
 
   renderRows() {
-    return this.planets.results.map(planet => {
-      return `
-        <tr>
-          <td>${planet.name}</td>
-          <td>${planet.terrain}</td>
-          <td>${planet.population}</td>
-          <td>${planet.climate}</td>
-          <td>${planet.diameter}</td>
-          <td>${planet.gravity}</td>
-          <td>${planet.orbital_period}</td>
-          <td>${planet.rotation_period}</td>
-          <td>${planet.surface_water}</td>
-        </tr>
-    `}).join("")
+    return this.planets.results.map(planet => `
+      <tr>
+        <td>${planet.name}</td>
+        <td>${planet.terrain}</td>
+        <td>${planet.population}</td>
+        <td>${planet.climate}</td>
+        <td>${planet.diameter}</td>
+        <td>${planet.gravity}</td>
+        <td>${planet.orbital_period}</td>
+        <td>${planet.rotation_period}</td>
+        <td>${planet.surface_water}</td>
+      </tr>
+    `).join("")
   }
 
   render() {
-    if (this.loading) {
-      this.shadowRoot.innerHTML = `Loading...`
-    } else {
-      this.shadowRoot.innerHTML = `
-      <h3><slot name="title">Star Wars Planets</slot></h3>
+    this.shadowRoot.innerHTML = `
+      <h3>Star Wars Planets</h3>
       <div>Count: ${this.planets.count}</div>
       <button id="previous" ${this.planets.previous ? "" : "disabled"}>Previous</button>
       <button id="next" ${this.planets.next ? "" : "disabled"}>Next</button>
@@ -88,10 +84,9 @@ class StarWarsPlanets extends HTMLElement {
           <th>Rotation Period</th>
           <th>Surface Water</th>
         </tr>
-        ${this.renderRows()}
+        ${this.loading ? 'Loading...' : this.renderRows()}
       </table>
     `
-    }
   }
 }
 
