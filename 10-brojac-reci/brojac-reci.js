@@ -3,20 +3,23 @@ function prebrojReci(roditelj){
   return sadrzaj.trim().split(/\s+/g).length
 }
 
-class BrojacReci extends HTMLParagraphElement {
+class BrojacReci extends HTMLElement {
   constructor() {
     super()
-    this.element = document.createElement('span')
+
+    this.element = document.createElement('p')
     this.element.style.color = 'maroon'
-    const koren = this.attachShadow({mode: 'open'})  // pravi shadow root
-    koren.appendChild(this.element)
+
+    const okvir = this.attachShadow({mode: 'open'})  // pravi shadow root
+    okvir.appendChild(this.element)
+
     this.update()
+    this.parentNode.addEventListener('input', () => this.update())
   }
 
   update() {
     this.element.textContent = 'Broj reči: ' + prebrojReci(this.parentNode)
-    setInterval(() => this.update(), 200)
   }
 }
 
-customElements.define('brojac-reci', BrojacReci, { extends: 'p' })
+customElements.define('brojac-reci', BrojacReci)
