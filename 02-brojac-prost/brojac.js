@@ -18,8 +18,8 @@ template.innerHTML = `
 export class Brojac extends HTMLElement {
   constructor() {
     super()
-    this.root = this.attachShadow({ mode: 'open' })
-    this.root.appendChild(template.content)
+    this.koren = this.attachShadow({ mode: 'open' })
+    this.koren.appendChild(template.content)
   }
 }
 
