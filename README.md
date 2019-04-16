@@ -1,2 +1,3 @@
-# ucimo-web-komponente
-Učimo Web komponente
+# Učimo Web komponente
+
+Učimo Web komponente, lagano.
