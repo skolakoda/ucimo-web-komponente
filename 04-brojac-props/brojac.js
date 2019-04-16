@@ -20,12 +20,12 @@ export class Brojac extends HTMLElement {
     super()
     this._value = 0
 
-    const okvir = this.attachShadow({ mode: 'open' })  // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
-    okvir.appendChild(template.content)
+    this.attachShadow({ mode: 'open' })  // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
+    this.shadowRoot.appendChild(template.content)
 
-    this.info = okvir.querySelector('p')
-    this.dugmePlus = okvir.querySelectorAll('button')[1]
-    this.dugmeMinus = okvir.querySelectorAll('button')[0]
+    this.info = this.shadowRoot.querySelector('p')
+    this.dugmePlus = this.shadowRoot.querySelectorAll('button')[1]
+    this.dugmeMinus = this.shadowRoot.querySelectorAll('button')[0]
 
     this.dugmePlus.addEventListener('click', e => this.value++)
     this.dugmeMinus.addEventListener('click', e => this.value--)

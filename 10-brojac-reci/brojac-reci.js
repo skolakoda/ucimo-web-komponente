@@ -10,8 +10,8 @@ class BrojacReci extends HTMLElement {
     this.element = document.createElement('p')
     this.element.style.color = 'maroon'
 
-    const okvir = this.attachShadow({mode: 'open'})  // pravi shadow root
-    okvir.appendChild(this.element)
+    this.attachShadow({mode: 'open'})  // pravi shadow root
+    this.shadowRoot.appendChild(this.element)
 
     this.update()
     this.parentNode.addEventListener('input', () => this.update())
