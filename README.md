@@ -1,6 +1,6 @@
 # Učimo Web komponente
 
-Učimo Web komponente, lagano.
+Učimo Web komponente, novi standardan način da se piše Objektno-orjentisani Javascript.
 
 ## Literatura
 
