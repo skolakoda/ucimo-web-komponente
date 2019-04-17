@@ -4,12 +4,12 @@ const books = [
   { title: 'Catch 22', author: 'Joseph Heller' }
 ];
 
-function appendBooks(templateId) {
+function renderBooks() {
   const booksList = document.getElementById('books');
-  const template = document.getElementById(templateId);
+  const template = document.getElementById('book-template');
   booksList.innerHTML = '';
   books.forEach(book => {
-    // pravi element koji koristi sablon
+    // element koristi sablon
     const element = document.importNode(template.content, true);
     element.querySelector('.title').innerHTML = book.title;
     element.querySelector('.author').innerHTML = book.author;
@@ -17,6 +17,4 @@ function appendBooks(templateId) {
   });
 }
 
-document.getElementById('choose').addEventListener('change', e => appendBooks(e.target.value));
-
-appendBooks('book-template');
+renderBooks();
